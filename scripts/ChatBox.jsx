@@ -56,8 +56,10 @@ getNewMessages(messages.length);
     </div>
     );
     return (
-        <dl>
-            {ListItems}
-        </dl>
+        <div class="grid-item chatgrid">
+            <dl>
+                {ListItems}
+            </dl>
+        </div>
         );
 }

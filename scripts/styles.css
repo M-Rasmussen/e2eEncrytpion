@@ -1,0 +1,30 @@
+
+.grid-container {
+  display: grid;
+  background-color: #2196F3;
+  padding: 1px;
+}
+
+.grid-item {
+  background-color: #66ff00;
+  text-align: center;
+  font-size: 10px;
+}
+
+
+.onlinegrid {
+  grid-row: 1 /6 ;
+}
+.chatgrid{
+    
+    grid-column: 2 / 12;
+    grid-row: 1 / 5;
+}
+.inputgrid{
+    grid-column: 2 / 11;
+    grid-row:5;
+}
+.submitgrid{
+    grid-column:11;
+    grid-row:5;
+}

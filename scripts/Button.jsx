@@ -21,9 +21,9 @@ export function Button() {
             }
     return (
         <form onSubmit={handleSubmit}>
-         <input type="text" value={value} onChange={changed} />
+         <input class="grid-item inputgrid" type="text" value={value} onChange={changed} />
 
-            <button type = "submit">Send</button>
+            <button class="grid-item submitgrid" type = "submit">Send</button>
         </form>
     );
 }
