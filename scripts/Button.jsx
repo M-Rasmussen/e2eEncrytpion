@@ -1,23 +1,29 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Socket } from './Socket';
 
-function handleSubmit(event) {
-    let random = Math.floor(Math.random() * 100);
-    console.log('Generated a random number: ', random);
-    
-    Socket.emit('new number', {
-        'number': random,
-    });
-    
-    console.log('Sent a random number ' + random + ' to server!');
-
-    event.preventDefault();
-}
 
 export function Button() {
+    const [value, setValue] = useState("");
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        Socket.emit('new message',{
+            'message' : {value}
+        });
+    
+    console.log('Sent a message ' + { value } + ' to server!');
+    setValue("");
+}
+
+
+    function changed(event) {
+        setValue(event.target.value);
+            }
     return (
         <form onSubmit={handleSubmit}>
-            <button>Send up a random number!</button>
+         <input type="text" value={value} onChange={changed} />
+
+            <button type = "submit">Send</button>
         </form>
     );
 }
