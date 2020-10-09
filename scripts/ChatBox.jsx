@@ -1,5 +1,6 @@
     
 import * as React from 'react';
+import './styles.css';
 
 import { Socket } from './Socket';
 

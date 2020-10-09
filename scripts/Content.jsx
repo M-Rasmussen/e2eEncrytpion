@@ -1,10 +1,10 @@
     
 import * as React from 'react';
-import "./styles.css"
+import './styles.css';
 
 import { Button } from './Button';
 import { Socket } from './Socket';
-import { ChatList } from './ChatBox'
+import { ChatList } from './ChatBox';
 export function Content() {
 
 
