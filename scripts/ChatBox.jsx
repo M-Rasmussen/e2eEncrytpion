@@ -11,15 +11,15 @@ const [messages, setMessages] = React.useState([]);
     function getNewMessages(x) {
         React.useEffect(() => {
             Socket.on('message received', (data) => {
-                console.log("Received a message from server sent by: " + data['user']);
-                console.log("Received a number from server: " + data['message']);
+                console.log("Received a message from server sent by: " + data['sentUser']);
+                console.log("Received a number from server: " + data['sentMessage']);
                 //setUser(data['allUser']);
                 setMessages([
                     ...messages,
                     {
                         id: x,
-                        sentUser: (data['user']),
-                        sentMessage: (data['message'])
+                        sentUser: (data['sentUser']),
+                        sentMessage: (data['sentMessage'])
                     }
             ])  
             })

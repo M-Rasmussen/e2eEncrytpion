@@ -21,12 +21,14 @@ def on_connect():
 def on_disconnect():
     print ('Someone disconnected!')
 
-@socketio.on('new number')
+@socketio.on('new message')
 def on_new_number(data):
     print("Got an event for new number with data:", data)
-    rand_number = data['number']
-    socketio.emit('number received', {
-        'number': rand_number
+    new_message = data['message']['value']
+    userName= 1 
+    socketio.emit('message received', {
+        'sentUser': userName,
+        'sentMessage': new_message
     })
 
 if __name__ == '__main__': 
