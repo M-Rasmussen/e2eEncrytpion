@@ -7,7 +7,7 @@ import flask_sqlalchemy
 import models 
 
 
-ADDRESSES_RECEIVED_CHANNEL = 'addresses received'
+MESSAGE_RECEIVED_CHANNEL = 'message received'
 
 app = flask.Flask(__name__)
 
@@ -28,20 +28,15 @@ db.app = app
 db.create_all()
 db.session.commit()
 
-def emit_all_addresses(channel):
-    all_addresses = [ \
+def emit_all_messages(channel):
+    all_messages = [ \
         db_address.address for db_address \
-        in db.session.query(models.Usps).all()]
+        in db.session.query(models.Chat).all()]
         
     socketio.emit(channel, {
-        'allAddresses': all_addresses
+        'allMessages': all_messages
     })
 
-
-
-@app.route('/')
-def hello():
-    return flask.render_template('index.html')
 
 @socketio.on('connect')
 def on_connect():
@@ -49,6 +44,8 @@ def on_connect():
     socketio.emit('connected', {
         'test': 'Connected'
     })
+    
+    emit_all_messages(MESSAGE_RECEIVED_CHANNEL)
 
 @socketio.on('disconnect')
 def on_disconnect():
@@ -58,11 +55,26 @@ def on_disconnect():
 def on_new_number(data):
     print("Got an event for new number with data:", data)
     new_message = data['message']['value']
-    userName= 1 
-    socketio.emit('message received', {
-        'sentUser': userName,
-        'sentMessage': new_message
-    })
+    userName= 'abc'
+    
+    db.sessions.add(models.Chat(new_message));
+    db.session.commit();
+    
+    emit_all_messages(MESSAGE_RECEIVED_CHANNEL)
+    
+    
+    
+    # socketio.emit('message received', {
+    #     'sentUser': userName,
+    #     'sentMessage': new_message
+    # })
+
+@app.route('/')
+def index():
+    emit_all_messages(MESSAGE_RECEIVED_CHANNEL)
+    
+    return flask.render_template('index.html')
+
 
 if __name__ == '__main__': 
     socketio.run(

@@ -13,14 +13,14 @@ const [messages, setMessages] = React.useState([]);
         React.useEffect(() => {
             Socket.on('message received', (data) => {
                 console.log("Received a message from server sent by: " + data['sentUser']);
-                console.log("Received a number from server: " + data['sentMessage']);
+                //console.log("Received a number from server: " + data['sentMessage']);
                 //setUser(data['allUser']);
                 setMessages([
                     ...messages,
                     {
                         id: x,
-                        sentUser: (data['sentUser']),
-                        sentMessage: (data['sentMessage'])
+                        //sentUser: (data['sentUser']),
+                        sentMessage: (data['allMessages'])
                     }
             ])  
             })
@@ -52,7 +52,7 @@ getNewMessages(messages.length);
 
     const ListItems = messages.map((data) =>
     <div key ={data.id}>
-    <dt>{data.sentUser}</dt>
+    <dt>"abc"</dt>
     <dd>{data.sentMessage}</dd>
     </div>
     );
