@@ -1,10 +1,43 @@
 import os
 import flask
 import flask_socketio
+from os.path import join, dirname
+from dotenv import load_dotenv
+import flask_sqlalchemy
+import models 
+
+
+ADDRESSES_RECEIVED_CHANNEL = 'addresses received'
 
 app = flask.Flask(__name__)
+
 socketio = flask_socketio.SocketIO(app)
 socketio.init_app(app, cors_allowed_origins="*")
+
+dotenv_path = join(dirname(__file__), 'project2.env')
+load_dotenv(dotenv_path)
+
+database_uri = os.environ['DATABASE_URL']
+
+app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
+
+db = flask_sqlalchemy.SQLAlchemy(app)
+db.init_app(app)
+db.app = app
+
+db.create_all()
+db.session.commit()
+
+def emit_all_addresses(channel):
+    all_addresses = [ \
+        db_address.address for db_address \
+        in db.session.query(models.Usps).all()]
+        
+    socketio.emit(channel, {
+        'allAddresses': all_addresses
+    })
+
+
 
 @app.route('/')
 def hello():
