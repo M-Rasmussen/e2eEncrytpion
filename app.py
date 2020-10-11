@@ -4,7 +4,9 @@ import flask_socketio
 from os.path import join, dirname
 from dotenv import load_dotenv
 import flask_sqlalchemy
-import models 
+import models
+import requests
+
 
 MESSAGE_RECEIVED_CHANNEL = 'message received'
 USER_UPDATE_CHANNEL='user updated'
@@ -18,6 +20,8 @@ dotenv_path = join(dirname(__file__), 'project2.env')
 load_dotenv(dotenv_path)
 
 database_uri = os.environ['DATABASE_URL']
+rapidapihost = os.environ['RAPID_URL_HOST']
+rapidapikey= os.environ['RAPID_URL_KEY']
 
 app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
 
@@ -35,6 +39,33 @@ db.create_all()
 db.session.commit()
 
 userCount=0
+
+
+def getJoke():
+    urledz = "https://joke3.p.rapidapi.com/v1/joke"
+
+    headerzed = {
+        'x-rapidapi-host': rapidapihost,
+        'x-rapidapi-key': rapidapikey
+    }
+
+    responsezed = requests.request("GET", urledz, headers=headerzed)
+
+    print(responsezed.text)
+def botStuff(botInput):
+    if(botInput[:8]=="!! about" or botInput[:7]=="!!about"):
+        print("about")
+    elif(botInput[:7]=="!! help" or botInput[:6]=="!!help"):
+        print("!! help")
+    elif(botInput[:15]=="!! funtranslate" or botInput[:14]=="!!funtranslate"):
+        print("!! (message)")
+    elif(botInput[:7]=="!! joke" or botInput[:6]=="!!joke"):
+        print("!! (message)")
+        getJoke()
+    elif(botInput[:12]=="!! coin flip" or botInput[:11]=="!!coin flip"):
+        print("!! (message)")
+    else:
+        print("enter better shit")
 
 
 def emit_all_messages(channel):
@@ -85,12 +116,12 @@ def on_new_number(data):
     userName= data['userName']['userName']
     print(new_message)
     print(userName)
-    
     db.session.add(models.Chat(data['userName']['userName'],data['message']['message']));
     db.session.commit();
-    
     emit_all_messages(MESSAGE_RECEIVED_CHANNEL)
-    
+    if(new_message[:2]=="!!"):
+        botStuff(new_message)
+        
     
     
     # socketio.emit('message received', {
