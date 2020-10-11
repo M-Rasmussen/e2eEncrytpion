@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 import flask_sqlalchemy
 import models 
 
-
 MESSAGE_RECEIVED_CHANNEL = 'message received'
 
 app = flask.Flask(__name__)
@@ -25,12 +24,13 @@ db = flask_sqlalchemy.SQLAlchemy(app)
 db.init_app(app)
 db.app = app
 
+
 db.create_all()
 db.session.commit()
 
 def emit_all_messages(channel):
     all_messages = [ \
-        db_address.address for db_address \
+        db_message.message for db_message \
         in db.session.query(models.Chat).all()]
         
     socketio.emit(channel, {
@@ -57,7 +57,7 @@ def on_new_number(data):
     new_message = data['message']['value']
     userName= 'abc'
     
-    db.sessions.add(models.Chat(new_message));
+    db.session.add(models.Chat(data['message']['value']));
     db.session.commit();
     
     emit_all_messages(MESSAGE_RECEIVED_CHANNEL)
