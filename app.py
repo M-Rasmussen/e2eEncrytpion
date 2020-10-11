@@ -7,6 +7,7 @@ import flask_sqlalchemy
 import models 
 
 MESSAGE_RECEIVED_CHANNEL = 'message received'
+USER_UPDATE_CHANNEL='user updated'
 
 app = flask.Flask(__name__)
 
@@ -33,6 +34,9 @@ db.app = app
 db.create_all()
 db.session.commit()
 
+userCount=0
+
+
 def emit_all_messages(channel):
     all_messages = [ \
         db_message.message for db_message \
@@ -49,12 +53,14 @@ def emit_all_messages(channel):
         messageOp+=all_messages[x]
         arrayList.append(messageOp)
         
-        
-
     socketio.emit(channel, {
         'allMessages': arrayList
     })
 
+def emit_num_users(channel):
+    socketio.emit(channel, {
+        'number': userCount
+    })
 
 @socketio.on('connect')
 def on_connect():
@@ -62,13 +68,16 @@ def on_connect():
     socketio.emit('connected', {
         'test': 'Connected'
     })
-    
+    global userCount
+    userCount+=1
     emit_all_messages(MESSAGE_RECEIVED_CHANNEL)
-
+    emit_num_users(USER_UPDATE_CHANNEL)
 @socketio.on('disconnect')
 def on_disconnect():
     print ('Someone disconnected!')
-
+    global userCount
+    userCount-=1
+    emit_num_users(USER_UPDATE_CHANNEL)
 @socketio.on('new message')
 def on_new_number(data):
     print("Got an event for new number with data:", data)

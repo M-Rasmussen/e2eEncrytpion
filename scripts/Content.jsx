@@ -5,12 +5,13 @@ import './styles.css';
 import { Button } from './Button';
 import { Socket } from './Socket';
 import { ChatList } from './ChatBox';
+import { OnLine } from './Login';
 export function Content() {
 
 
     return (
         <div class ="grid-container">
-            <div class="grid-item onlinegrid"></div>
+            <OnLine />
             <ChatList />
             <Button />
         </div>
