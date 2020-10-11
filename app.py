@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 import flask_sqlalchemy
 import models
 import requests
-
+import random
+import json
 
 MESSAGE_RECEIVED_CHANNEL = 'message received'
 USER_UPDATE_CHANNEL='user updated'
@@ -40,32 +41,61 @@ db.session.commit()
 
 userCount=0
 
-
+# FOR JOKE
 def getJoke():
     urledz = "https://joke3.p.rapidapi.com/v1/joke"
-
     headerzed = {
         'x-rapidapi-host': rapidapihost,
         'x-rapidapi-key': rapidapikey
     }
-
     responsezed = requests.request("GET", urledz, headers=headerzed)
+    jokereturn=responsezed.json()
+    funJoke=(json.dumps(jokereturn["content"],indent=2))
+    print(funJoke)
+    return funJoke
+    
 
-    print(responsezed.text)
+def funtranslate(message):
+    funurl = "http://api.funtranslations.com/translate/valyrian?text="
+    funurl +=message
+    funpayload = {}
+    funheaders= {}
+    funresponse = requests.request("GET", funurl, headers=funheaders, data = funpayload)
+    funreturn=funresponse.json()
+    funPirate=(json.dumps(funreturn["contents"]["translated"],indent=2))
+    
+    return(funPirate)
+
+
+# FOR COIN FLIP
+def flipcoins():
+    ht=random.randrange(1)
+    if (ht==1):
+        return "heads"
+    else:
+        return "tails"
+    
+    
+    
+    
 def botStuff(botInput):
+    rtnMessage=""
     if(botInput[:8]=="!! about" or botInput[:7]=="!!about"):
-        print("about")
+        rtnMessage= "I tell jokes, flip coins, and translate your language into high valyrian. just put !! infront of the commands and I will return as you please. For more information enter !!help"
     elif(botInput[:7]=="!! help" or botInput[:6]=="!!help"):
-        print("!! help")
+        rtnMessage=" !! about and I will tell you about me. !! funtranslate (words), will translate anything after that into high valyrian. !! joke and I will tell you a joke. !! coin flip will result me in flipping a coin and I will tell you the results. "
     elif(botInput[:15]=="!! funtranslate" or botInput[:14]=="!!funtranslate"):
+        rtnMessage=funtranslate(botInput[15:])
         print("!! (message)")
     elif(botInput[:7]=="!! joke" or botInput[:6]=="!!joke"):
-        print("!! (message)")
-        getJoke()
+        rtnMessage=getJoke()
     elif(botInput[:12]=="!! coin flip" or botInput[:11]=="!!coin flip"):
-        print("!! (message)")
+        rtnMessage=flipcoins()
     else:
-        print("enter better shit")
+        rtnMessage="I did not understand you please enter !! help for all of the inputs I respond to"
+    db.session.add(models.Chat('bot',rtnMessage));
+    db.session.commit();
+    emit_all_messages(MESSAGE_RECEIVED_CHANNEL)    
 
 
 def emit_all_messages(channel):
@@ -75,8 +105,8 @@ def emit_all_messages(channel):
     all_names =[\
         db_name.name for db_name in db.session.query(models.Chat).all() ] 
     
-    print(all_names)   
-    print(all_messages)
+    # print(all_names)   
+    # print(all_messages)
     arrayList=[]
     for x in range(len(all_messages)):
         messageOp=all_names[x]
