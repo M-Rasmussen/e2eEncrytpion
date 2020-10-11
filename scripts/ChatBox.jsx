@@ -8,6 +8,7 @@ export function ChatList(){
 
 //const [user, setUser] = React.useState([]);
 const [messages, setMessages] = React.useState([]);
+//const [namesed, setnamesed]=React.useState([]);
 
     function getNewMessages() {
         React.useEffect(() => {
@@ -15,15 +16,16 @@ const [messages, setMessages] = React.useState([]);
                 console.log("Received a message from server sent by: " + data['sentUser']);
                 //console.log("Received a number from server: " + data['sentMessage']);
                 //setUser(data['allUser']);
-                setMessages(data['allMessages']);
-                    // ...messages,
-                    // {
-
-                    //     //sentUser: (data['sentUser']),
-                    //     sentMessage: (data['allMessages'])
-                    // }
-            // ]
-            // )  
+                console.log(data['allMessages']);
+                console.log(data['allNames']);
+                              
+                setMessages([
+                    ...messages,
+                    {
+                        nameds: (data['allNames']),
+                        messageds: (data['allMessages'])
+                    }
+                    ]);
             });
         });
     }
@@ -51,19 +53,19 @@ const [messages, setMessages] = React.useState([]);
 // }
 getNewMessages();
 
+const ListofItems=messages.map((message, index)=>
+<div>
+<dt key= {index}>{message.nameds}</dt>
+                <dd>{message.messageds}</dd>
+                </div>);
   
 
     
     return (
         <div class="grid-item chatgrid">
             <dl>
-                {messages.map((message, index) =>
-                <div key ={index}>
-                <dt>"abc"</dt>
-                <dd>{message}</dd>
-                </div>
-                )}
-            </dl>
+    {ListofItems}
+    </dl>
         </div>
         );
 }
