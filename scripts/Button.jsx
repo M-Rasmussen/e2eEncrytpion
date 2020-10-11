@@ -21,10 +21,12 @@ export function Button() {
         setValue(event.target.value);
             }
     return (
+        <div class="grid-item formwrappergrid">
         <form onSubmit={handleSubmit}>
          <input class="grid-item inputgrid" type="text" value={value} onChange={changed} />
 
             <button class="grid-item submitgrid" type = "submit">Send</button>
         </form>
+        </div>
     );
 }
