@@ -69,7 +69,7 @@ def funtranslate(message):
 
 # FOR COIN FLIP
 def flipcoins():
-    ht=random.randrange(1)
+    ht=random.randint(0,1)
     if (ht==1):
         return "heads"
     else:
