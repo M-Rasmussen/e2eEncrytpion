@@ -26,6 +26,10 @@ db.app = app
 
 
    
+
+
+
+
 db.create_all()
 db.session.commit()
 
@@ -35,9 +39,20 @@ def emit_all_messages(channel):
         in db.session.query(models.Chat).all()]
     all_names =[\
         db_name.name for db_name in db.session.query(models.Chat).all() ] 
+    
+    print(all_names)   
+    print(all_messages)
+    arrayList=[]
+    for x in range(len(all_messages)):
+        messageOp=all_names[x]
+        messageOp+= ": "
+        messageOp+=all_messages[x]
+        arrayList.append(messageOp)
+        
+        
+
     socketio.emit(channel, {
-        'allMessages': all_messages,
-        'allNames':all_names
+        'allMessages': arrayList
     })
 
 

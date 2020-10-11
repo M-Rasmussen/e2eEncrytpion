@@ -2,7 +2,6 @@
 import flask_sqlalchemy
 from app import db
 
-
 class Chat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
@@ -13,4 +12,3 @@ class Chat(db.Model):
         
     def __repr__(self):
         return '<Chat message: %s>' % self.message
-

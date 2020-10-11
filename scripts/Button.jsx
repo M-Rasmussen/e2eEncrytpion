@@ -29,7 +29,6 @@ export function Button() {
 
         
          <div class="grid-item formwrappergrid">
->>>>>>> database
         <form onSubmit={handleSubmit}>
                 <input class="grid-item namegrid" type="text" value={userName} onChange={changedName}/>
 

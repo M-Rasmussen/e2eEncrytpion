@@ -10,62 +10,51 @@ export function ChatList(){
 const [messages, setMessages] = React.useState([]);
 //const [namesed, setnamesed]=React.useState([]);
 
-    function getNewMessages() {
+    // function getNewMessages() {
+    //     React.useEffect(() => {
+    //         Socket.on('message received', (data) => {
+    //             console.log("Received a message from server sent by: " + data['allMessages']);
+    //             //console.log("Received a number from server: " + data['sentMessage']);
+    //             //setUser(data['allUser']);
+    //             console.log(data['allMessages']);
+    //             console.log(data['allNames']);
+                              
+    //             setMessages([
+    //                 ...messages,
+    //                 {
+    //                     nameds: (data['allNames']),
+    //                     messageds: (data['allMessages'])
+    //                 }
+    //                 ]);
+    //         });
+    //     });
+    // }
+    
+     function getNewMessages() {
         React.useEffect(() => {
             Socket.on('message received', (data) => {
-                console.log("Received a message from server sent by: " + data['sentUser']);
-                //console.log("Received a number from server: " + data['sentMessage']);
-                //setUser(data['allUser']);
-                console.log(data['allMessages']);
-                console.log(data['allNames']);
-                              
-                setMessages([
-                    ...messages,
-                    {
-                        nameds: (data['allNames']),
-                        messageds: (data['allMessages'])
-                    }
-                    ]);
+                console.log("Received addresses from server: " + data['allMessages']);
+                setMessages(data['allMessages']);
             });
         });
     }
-    //const ListItems = items.map((item) => <li>{item}</li>);
-    
-//     function IndivChat(props){
-//         const dtUser=( 
-//         props.messages.map((message) =>
-//         <dt key={message.id}>
-//           {message.sentUser}
-//         </dt>));
-        
-//         const dlMessage=( 
-//         props.messages.map((message) =>
-//         <dl key={message.id}>
-//           {message.sentUser}
-//         </dl>));
 
-// return (
-    
-//       {dtUser}
-//       {dlMessage}
-    
-//   );
-// }
 getNewMessages();
 
-const ListofItems=messages.map((message, index)=>
-<div>
-<dt key= {index}>{message.nameds}</dt>
-                <dd>{message.messageds}</dd>
-                </div>);
+// const ListofItems=messages.map((message, index)=>
+// <div>
+// <dt key= {index}>{message.nameds[index]}</dt>
+//                 <dd>{message.messageds[index]}</dd>
+//                 </div>);
   
 
     
     return (
         <div class="grid-item chatgrid">
-            <dl>
-    {ListofItems}
-    </dl>
+            <ul>
+               {messages.map((message, index) =>
+                        <li key={index}>{message}</li>)}
+            </ul>
         </div>
         );
 }

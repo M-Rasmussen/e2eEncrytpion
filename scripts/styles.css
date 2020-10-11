@@ -42,7 +42,10 @@ form{
     height:100%;
 }
 .namegrid{
-    background-color:#000000;
+    background-color:#FFFFFF;
     grid-column: 1;
 
+}
+li{
+   list-style-type:none; 
 }
