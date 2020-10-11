@@ -25,6 +25,7 @@ db.init_app(app)
 db.app = app
 
 
+   
 db.create_all()
 db.session.commit()
 
@@ -32,9 +33,11 @@ def emit_all_messages(channel):
     all_messages = [ \
         db_message.message for db_message \
         in db.session.query(models.Chat).all()]
-        
+    all_names =[\
+        db_name.name for db_name in db.session.query(models.Chat).all() ] 
     socketio.emit(channel, {
-        'allMessages': all_messages
+        'allMessages': all_messages,
+        'allNames':all_names
     })
 
 
@@ -54,10 +57,12 @@ def on_disconnect():
 @socketio.on('new message')
 def on_new_number(data):
     print("Got an event for new number with data:", data)
-    new_message = data['message']['value']
-    userName= 'abc'
+    new_message = data['message']['message']
+    userName= data['userName']['userName']
+    print(new_message)
+    print(userName)
     
-    db.session.add(models.Chat(data['message']['value']));
+    db.session.add(models.Chat(data['userName']['userName'],data['message']['message']));
     db.session.commit();
     
     emit_all_messages(MESSAGE_RECEIVED_CHANNEL)
