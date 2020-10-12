@@ -30,9 +30,9 @@ export function Button() {
         
          <div class="grid-item formwrappergrid">
         <form onSubmit={handleSubmit}>
-                <input class="grid-item namegrid" type="text" value={userName} onChange={changedName}/>
+                <input class="grid-item namegrid" type="text" value={userName} onChange={changedName} placeholder="Enter your name" required/>
 
-         <input class="grid-item inputgrid" type="text" value={message} onChange={changed} />
+         <input class="grid-item inputgrid" type="text" value={message} onChange={changed} placeholder="enter message" required/>
 
             <button class="grid-item submitgrid" type = "submit">Send</button>
         </form>
