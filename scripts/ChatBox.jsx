@@ -62,7 +62,7 @@ function checkSender(messaged){
             <ul>
                {messages.map((message, index) =>
                     
-                        <li key={index} className={checkSender(message)}>{message}</li>)}
+                        <li key={index} className={checkSender(message)}><p>{message}</p></li>)}
             </ul>
         </div>
         );

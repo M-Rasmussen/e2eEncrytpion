@@ -16,26 +16,34 @@ body{margin:0px;}
     grid-column: 1;
     width:15vw;
     height:90vh;
-    background-color: #FFB6C1;
+    background-color: #eed4ad;
+}
+.onlinegrid p{
+   padding:5px;
 }
 .chatgrid{
-    background-color: #add8e6;
-    grid-column: 2 / 12;
+background-image: url('https://images.unsplash.com/photo-1553989140-de8d021053bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+grid-column: 2 / 12;
     height:90vh;
     width:85vw;
     overflow-y:scroll; 
     text-align:left;
+    background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
 }
 .inputgrid{
     width: 70vw;
     grid-column: 2 / 11;
-    background-color: #BFFF00;
+    background-color: #152f3e;
+    color: #ffffff;
 }
 .submitgrid{
         width:15vw;
 
     grid-column:11;
-      background-color: #008080;
+    background-color: #ffffff;
+    color: #152f3e;
 }
 .formwrappergrid{
     width:100%;
@@ -51,12 +59,20 @@ form{
 .namegrid{
         width:15vw;
 
-    background-color:#FFFFFF;
+    background-color: #ffffff;
+    color: #152f3e;
     grid-column: 1;
 
 }
 li{
-   list-style-type:none; 
+   list-style-type:none;
+   padding-right:5px;
+}
+li p{
+    border: 10px solid #ffffff;
+    background-color: #ffffff;
+    border-radius: 15px;
+    width: fit-content;
 }
 .botsender{
     font-family:"Courier New";
