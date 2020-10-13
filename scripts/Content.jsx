@@ -10,7 +10,7 @@ export function Content() {
 
 
     return (
-        <div class ="grid-container">
+        <div className ="grid-container">
             <OnLine />
             <ChatList />
             <Button />

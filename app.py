@@ -98,6 +98,9 @@ def botStuff(botInput):
     emit_all_messages(MESSAGE_RECEIVED_CHANNEL)    
 
 
+
+
+
 def emit_all_messages(channel):
     all_messages = [ \
         db_message.message for db_message \

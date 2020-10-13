@@ -28,13 +28,13 @@ export function Button() {
     return (
 
         
-         <div class="grid-item formwrappergrid">
+         <div className="grid-item formwrappergrid">
         <form onSubmit={handleSubmit}>
-                <input class="grid-item namegrid" type="text" value={userName} onChange={changedName} placeholder="Enter your name" required/>
+                <input className="grid-item namegrid" type="text" value={userName} onChange={changedName} placeholder="Enter your name" required/>
 
-         <input class="grid-item inputgrid" type="text" value={message} onChange={changed} placeholder="enter message" required/>
+         <input className="grid-item inputgrid" type="text" value={message} onChange={changed} placeholder="enter message" required/>
 
-            <button class="grid-item submitgrid" type = "submit">Send</button>
+            <button className="grid-item submitgrid" type = "submit">Send</button>
         </form>
         </div>
 

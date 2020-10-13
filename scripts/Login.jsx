@@ -18,7 +18,8 @@ export function OnLine() {
     newNumber();
 
     return (
-        <div class="grid-item onlinegrid">
+        <div className="grid-item onlinegrid">
+            <p>Welcome to the chatroom, please enter your name in the bottom right hand corner and then feel free to send messages.</p>
             <p>Active Users:<span>{number}</span> </p>
         </div>
     );

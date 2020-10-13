@@ -34,6 +34,7 @@ const [messages, setMessages] = React.useState([]);
         React.useEffect(() => {
             Socket.on('message received', (data) => {
                 console.log("Received addresses from server: " + data['allMessages']);
+                //console.log("Received addresses from server: " + data['allNames']);
                 setMessages(data['allMessages']);
             });
         });
@@ -47,13 +48,21 @@ getNewMessages();
 //                 <dd>{message.messageds[index]}</dd>
 //                 </div>);
   
-
+function checkSender(messaged){
+    console.log(messaged)
+    var x;
+    if (messaged.startsWith("bot:")){
+        return('botsender')
+    }
+    return('userSender');
+}
     
     return (
-        <div class="grid-item chatgrid">
+        <div className="grid-item chatgrid">
             <ul>
                {messages.map((message, index) =>
-                        <li key={index}>{message}</li>)}
+                    
+                        <li key={index} className={checkSender(message)}>{message}</li>)}
             </ul>
         </div>
         );

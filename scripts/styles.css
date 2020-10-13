@@ -16,7 +16,7 @@ body{margin:0px;}
     grid-column: 1;
     width:15vw;
     height:90vh;
-    background-color: #FFB6C1	;
+    background-color: #FFB6C1;
 }
 .chatgrid{
     background-color: #add8e6;
@@ -57,4 +57,10 @@ form{
 }
 li{
    list-style-type:none; 
+}
+.botsender{
+    font-family:"Courier New";
+}
+.userSender{
+    font-family:"Times New Roman";
 }
