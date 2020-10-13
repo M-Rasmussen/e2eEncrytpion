@@ -1,3 +1,4 @@
+App can be found at https://cryptic-wildwood-42908.herokuapp.com/
 1 Install your stuff!  
   a) npm install  
   b) pip install flask-socketio  
