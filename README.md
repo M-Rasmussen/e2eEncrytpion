@@ -52,7 +52,8 @@ b) In a new terminal enter: python app.py
 
 6) APIs
 a) Create an account at https://rapidapi.com/ 
-b) https://english.api.rakuten.net/LemmoTresto/api/joke3/details is the API THAT WAS USED. c) Get host adn key from the api and insert the things below into your sql. 
+b) https://english.api.rakuten.net/LemmoTresto/api/joke3/details is the API THAT WAS USED.
+c) Get host adn key from the api and insert the things below into your env file. 
 
         rapidapihost= enter the api host here 
         rapidapikey= enter the api key here
