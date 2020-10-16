@@ -7,6 +7,7 @@ import flask_sqlalchemy
 import models
 import requests
 import botbuild
+from flask import request
 
 MESSAGE_RECEIVED_CHANNEL = 'message received'
 USER_UPDATE_CHANNEL='user updated'
@@ -32,7 +33,7 @@ db.create_all()
 db.session.commit()
 
 userCount=0
-
+users=[]
 
 def emit_all_messages(channel):
     all_messages = [ \
@@ -56,6 +57,7 @@ def emit_num_users(channel):
     socketio.emit(channel, {
         'number': userCount
     })
+    
 
 @socketio.on('connect')
 def on_connect():
@@ -66,6 +68,7 @@ def on_connect():
     userCount+=1
     emit_all_messages(MESSAGE_RECEIVED_CHANNEL)
     emit_num_users(USER_UPDATE_CHANNEL)
+    
 @socketio.on('disconnect')
 def on_disconnect():
     global userCount
@@ -76,9 +79,14 @@ def on_disconnect():
 def on_new_number(data):
     print("Got an event for new number with data:", data)
     new_message = data['message']['message']
-    userName= data['userName']['userName']
-    db.session.add(models.Chat(data['userName']['userName'],data['message']['message']));
-    db.session.commit();
+    if not any(d['userid']==request.sid for d in users):
+            # db.session.add(models.Chat(data['userName']['userName'],data['message']['message']));
+            # db.session.commit();
+            pass
+    else:
+        res = next((sub for sub in users if sub['userid'] == request.sid), None)
+        db.session.add(models.Chat(res.get("name"),data['message']['message']));
+        db.session.commit();
     emit_all_messages(MESSAGE_RECEIVED_CHANNEL)
     #code to see if the message was a bot, if was figure out response and send it back
     if(new_message[:2]=="!!"):
@@ -87,6 +95,10 @@ def on_new_number(data):
         db.session.commit();
         emit_all_messages(MESSAGE_RECEIVED_CHANNEL)    
 
+@socketio.on('new google user')
+def on_new_google_user(data):
+    print("Got an event for new google user input with data:", data)
+    users.append({'userid': request.sid, 'name':data['name']})
 
 @app.route('/')
 def index():
