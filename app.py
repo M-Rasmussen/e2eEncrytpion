@@ -74,15 +74,22 @@ def on_disconnect():
     global userCount
     userCount-=1
     emit_num_users(USER_UPDATE_CHANNEL)
+    #TODO: REMOVE THE PERSON WHO DISCONNECTED FROM THE LIST OF PEOPLE WHO ARE ONLINE
     
 @socketio.on('new message')
 def on_new_number(data):
     print("Got an event for new number with data:", data)
+    roomid=request.sid
     new_message = data['message']['message']
     if not any(d['userid']==request.sid for d in users):
+            errorz="There was an error please make sure you are logged in."
+            print('inside senderror')
+            socketio.emit('messageError', { 
+            'errormessage': errorz
+            },room=roomid)
             # db.session.add(models.Chat(data['userName']['userName'],data['message']['message']));
             # db.session.commit();
-            pass
+            
     else:
         res = next((sub for sub in users if sub['userid'] == request.sid), None)
         db.session.add(models.Chat(res.get("name"),data['message']['message']));
@@ -99,6 +106,9 @@ def on_new_number(data):
 def on_new_google_user(data):
     print("Got an event for new google user input with data:", data)
     users.append({'userid': request.sid, 'name':data['name']})
+    socketio.emit('messageError', { 
+        'errormessage': ''
+            },room=request.sid)
 
 @app.route('/')
 def index():
