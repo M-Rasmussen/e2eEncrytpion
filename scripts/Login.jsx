@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Socket } from './Socket';
 import './styles.css';
 import { GoogleButton } from './GoogleButton';
+import { LoginError } from './LoginError';
 
 
 export function OnLine() {
@@ -23,6 +24,7 @@ export function OnLine() {
             <GoogleButton />
             <p>Welcome to the chatroom, please enter your name in the bottom right hand corner and then feel free to send messages.</p>
             <p>Active Users:<span>{number}</span> </p>
+            <LoginError />
         </div>
     );
 }
