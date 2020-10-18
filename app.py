@@ -7,6 +7,7 @@ import flask_sqlalchemy
 import models
 import requests
 import botbuild
+import urlparse
 from flask import request
 
 MESSAGE_RECEIVED_CHANNEL = 'message received'
@@ -54,6 +55,7 @@ def emit_all_messages(channel):
     
 
 def emit_num_users(channel):
+    userCount=len(users)
     socketio.emit(channel, {
         'number': userCount
     })
@@ -64,18 +66,15 @@ def on_connect():
     socketio.emit('connected', {
         'test': 'Connected'
     })
-    global userCount
-    userCount+=1
     emit_all_messages(MESSAGE_RECEIVED_CHANNEL)
     emit_num_users(USER_UPDATE_CHANNEL)
     
 @socketio.on('disconnect')
 def on_disconnect():
-    global userCount
-    userCount-=1
+    global users
+    users = list(filter(lambda i: i['userid'] != request.sid, users)) 
     emit_num_users(USER_UPDATE_CHANNEL)
-    #TODO: REMOVE THE PERSON WHO DISCONNECTED FROM THE LIST OF PEOPLE WHO ARE ONLINE
-    
+
 @socketio.on('new message')
 def on_new_number(data):
     print("Got an event for new number with data:", data)
@@ -91,8 +90,10 @@ def on_new_number(data):
             # db.session.commit();
             
     else:
+        urlCheck=urlparse.urlParse(new_message)
+        new_message=urlCheck.checkURL()
         res = next((sub for sub in users if sub['userid'] == request.sid), None)
-        db.session.add(models.Chat(res.get("name"),data['message']['message']));
+        db.session.add(models.Chat(res.get("name"),new_message));
         db.session.commit();
     emit_all_messages(MESSAGE_RECEIVED_CHANNEL)
     #code to see if the message was a bot, if was figure out response and send it back
@@ -106,6 +107,7 @@ def on_new_number(data):
 def on_new_google_user(data):
     print("Got an event for new google user input with data:", data)
     users.append({'userid': request.sid, 'name':data['name']})
+    emit_num_users(USER_UPDATE_CHANNEL)
     socketio.emit('messageError', { 
         'errormessage': ''
             },room=request.sid)
