@@ -19,7 +19,7 @@ export function LoginError() {
     newErrorMessage();
     return (
         <div>
-            <p> {message} </p>
+            <p className="LoginErrorMessage"> {message} </p>
         </div>
     );
 }
