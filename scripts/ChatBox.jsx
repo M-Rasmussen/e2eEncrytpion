@@ -24,60 +24,61 @@ function checkSender(messaged){
     }
     return('userSender');
 }
-
 function checkUrlPic(messaged){
-  
-    if(messaged.includes('<a href=')|| messaged.includes('<img src=')){
-        console.log("here1");
-        if(messaged.includes('<a href=')){
-                    console.log("here tag");
-            var arrOfMess=messaged.split(' ');
+    console.log("chekcurl PIC 1");
+    if(messaged.includes('<ahref=')|| messaged.includes('<imgsrc=')){
+            console.log("chekcurl PIC 2");
+        var arrOfMess=messaged.split(' ');
             var i;
             var rtnMessageInfront=" ";
             var rtnMessageBack=" ";
-            var cleanupLink;
             var flag=true;
+            var imglink;
+            var pic=true;
             for(i=0; i<arrOfMess.length; i++){
-                if(arrOfMess[i].includes('<a href=')){
-                    console.log("here2");
+                console.log(arrOfMess[i]);
+                if(arrOfMess[i].includes('<ahref=')){
+                    // let a= document.createElement('a');
+                    // a.href=arrOfMess[i].slice(7);
+                    // a.title=arrOfMess[i].slice(7);
+                    // document.urlorpic.appendChild(a);
+                    imglink=arrOfMess[i].slice(7); 
                     flag=false;
-                    cleanupLink.concat('"',arrOfMess[i].slice(8),'"');
-                    console.log(cleanupLink);
+                    pic=false;
+                    i++;
+                }
+                if(arrOfMess[i].includes('<imgsrc=')){
+                    imglink=arrOfMess[i].slice(8);
+                    // let img= document.createElement('img');
+                    // img.src=arrOfMess[i].slice(8);
+                    // document.urlorpic.appendChild(img);
+                    // React.createElement("img",{url:arrOfMess[i].slice(8)})
+                    i++;
+                    flag=false;
+                    pic=true;
                 }
                 if(flag){
-                    rtnMessageInfront.concat(arrOfMess[i]," ");
+                    console.log(arrOfMess[i]);
+                   rtnMessageInfront =rtnMessageInfront.concat(arrOfMess[i]," ");
+                    console.log(rtnMessageInfront);
                 }else{
-                    rtnMessageBack.concat(arrOfMess[i], " ");
+                   rtnMessageBack =rtnMessageBack.concat(arrOfMess[i], " ");
                 }
         }
-        console.log(rtnMessageInfront);
-        console.log(cleanupLink);
-        console.log(rtnMessageBack);
-        return(<div><p>{rtnMessageInfront}</p><a href={cleanupLink}>{cleanupLink}</a><p>{rtnMessageBack}</p></div>);
+        if (pic){
+            console.log("PICTURE");
+            console.log(rtnMessageInfront);
+        return(React.createElement("span", null, rtnMessageInfront,React.createElement("img",{src:imglink}),rtnMessageBack));
+            
         }else{
-            let i;
-            let rtnMessageInfront=" ";
-            let rtnMessageBack=" ";
-            let cleanupLink=" ";
-            flag=true;
-            for(i=0; i<arrOfMess.length; i++){
-                if(arrOfMess[i].includes('<img src=')){
-                    flag=false;
-                    cleanupLink.concat('"',arrOfMess[i].slice(9),'"');
-                }
-                if(flag){
-                    rtnMessageInfront.concat(arrOfMess[i]," ");
-                }else{
-                    rtnMessageBack.concat(arrOfMess[i], " ");
-                }
-        }
-return(<div><p>{rtnMessageInfront}</p><img src={cleanupLink}></img><p>{rtnMessageBack}</p></div>);
-    }
-    }
-    
-    else{
-        return(<div><p>{messaged}</p></div>);
+    console.log(rtnMessageInfront);
+        return(React.createElement("span",null, rtnMessageInfront,React.createElement("a",{href:imglink}, imglink),rtnMessageBack));
 
+        }
+            // <div><p>{rtnMessageInfront}</p><div id="urlorpic"></div><p>{rtnMessageBack}</p></div>);
+    
+    }else{
+        return(<div><p>{messaged}</p></div>);
     }
     
 }

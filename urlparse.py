@@ -14,12 +14,12 @@ class urlParse():
                 print(parsedinfo.get('scheme'))
                 urlpic=parsedinfo.get('path')
                 if (any(pic in urlpic for pic in picimages)):
-                    picRtn='<img src='
+                    picRtn='<imgsrc='
                     picRtn+=message
                     rtnMessage+=picRtn
                     rtnMessage+=" "
                 else:
-                    atag='<a href='
+                    atag='<ahref='
                     atag+=message
                     rtnMessage+=atag
                     rtnMessage+=" "
