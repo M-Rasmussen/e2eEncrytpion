@@ -67,18 +67,23 @@ form{
 li{
    list-style-type:none;
    padding-right:5px;
+   margin-top:5px;
 }
-li p{
-    border: 10px solid #ffffff;
+
+.botsender{
+    font-family:"Courier New";
+       border: 10px solid #ffffff;
     background-color: #ffffff;
     border-radius: 15px;
     width: fit-content;
 }
-.botsender{
-    font-family:"Courier New";
-}
 .userSender{
     font-family:"Times New Roman";
+   border: 10px solid #ffffff;
+    background-color: #ffffff;
+    border-radius: 15px;
+    width: fit-content;
+    
 }
 .LoginErrorMessage{
     color:red;

@@ -14,18 +14,19 @@ class urlParse():
                 print(parsedinfo.get('scheme'))
                 urlpic=parsedinfo.get('path')
                 if (any(pic in urlpic for pic in picimages)):
-                    picRtn='<img src="'
+                    picRtn='<img src='
                     picRtn+=message
-                    picRtn+='"> '
                     rtnMessage+=picRtn
+                    rtnMessage+=" "
                 else:
-                    atag='<a href="'
+                    atag='<a href='
                     atag+=message
-                    atag+='">'
-                    atag+=message
-                    atag+='</a> '
+                    rtnMessage+=atag
+                    rtnMessage+=" "
+
             except:
                 rtnMessage+=message
                 rtnMessage+= " "
+        print(rtnMessage)
         return rtnMessage
             
