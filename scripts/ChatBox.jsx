@@ -25,9 +25,9 @@ function checkSender(messaged){
     return('userSender');
 }
 function checkUrlPic(messaged){
-    console.log("chekcurl PIC 1");
+    //console.log("chekcurl PIC 1");
     if(messaged.includes('<ahref=')|| messaged.includes('<imgsrc=')){
-            console.log("chekcurl PIC 2");
+            //console.log("chekcurl PIC 2");
         var arrOfMess=messaged.split(' ');
             var i;
             var rtnMessageInfront=" ";
@@ -36,7 +36,7 @@ function checkUrlPic(messaged){
             var imglink;
             var pic=true;
             for(i=0; i<arrOfMess.length; i++){
-                console.log(arrOfMess[i]);
+                //console.log(arrOfMess[i]);
                 if(arrOfMess[i].includes('<ahref=')){
                     // let a= document.createElement('a');
                     // a.href=arrOfMess[i].slice(7);
@@ -58,20 +58,20 @@ function checkUrlPic(messaged){
                     pic=true;
                 }
                 if(flag){
-                    console.log(arrOfMess[i]);
+                    //console.log(arrOfMess[i]);
                    rtnMessageInfront =rtnMessageInfront.concat(arrOfMess[i]," ");
-                    console.log(rtnMessageInfront);
+                    //console.log(rtnMessageInfront);
                 }else{
                    rtnMessageBack =rtnMessageBack.concat(arrOfMess[i], " ");
                 }
         }
         if (pic){
-            console.log("PICTURE");
-            console.log(rtnMessageInfront);
+            //onsole.log("PICTURE");
+            //console.log(rtnMessageInfront);
         return(React.createElement("span", null, rtnMessageInfront,React.createElement("img",{src:imglink}),rtnMessageBack));
             
         }else{
-    console.log(rtnMessageInfront);
+    //console.log(rtnMessageInfront);
         return(React.createElement("span",null, rtnMessageInfront,React.createElement("a",{href:imglink}, imglink),rtnMessageBack));
 
         }

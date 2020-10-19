@@ -3,6 +3,7 @@ import { Socket } from './Socket';
 import './styles.css';
 import { GoogleButton } from './GoogleButton';
 import { LoginError } from './LoginError';
+import { UserPicture } from './ProfilePicture';
 
 
 export function OnLine() {
@@ -25,7 +26,7 @@ export function OnLine() {
     }
     function displayLoginbutton(log){
         if(log == "logedin"){
-            console.log("DISPLAY");
+            //console.log("DISPLAY");
             return "logHide";
         }
         return "logDispay";
@@ -42,6 +43,7 @@ export function OnLine() {
             <p>Welcome to the chatroom, please enter your name in the bottom right hand corner and then feel free to send messages.</p>
             <p>Active Users:<span>{number}</span> </p>
             <LoginError />
+            <UserPicture />
         </div>
     );
 }

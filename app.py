@@ -108,6 +108,9 @@ def on_new_google_user(data):
     print("Got an event for new google user input with data:", data)
     users.append({'userid': request.sid, 'name':data['name']})
     emit_num_users(USER_UPDATE_CHANNEL)
+    socketio.emit('profilePic',{
+        'profPicture': data['profilepic']
+    },room=request.sid)
     socketio.emit('messageError', { 
         'errormessage': ''
             },room=request.sid)

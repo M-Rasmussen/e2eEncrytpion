@@ -5,18 +5,21 @@ import GoogleLogin from 'react-google-login';
 
 const responseGoogle = (response) => {
   console.log(response);
-}
+};
  
 
 function handleSubmit(response) {
-      console.log(response.profileObj.name);
+    //console.log(response);
+    //console.log(response.profileObj.name);
 
     let name = response.profileObj.name;
+    let profilepic=response.profileObj.imageUrl;
     Socket.emit('new google user', {
         'name': name,
+        'profilepic':profilepic
     });
     
-    console.log('Sent the name ' + name + ' to server!');
+    //console.log('Sent the name ' + name + ' to server!');
 }
 
 export function GoogleButton() {

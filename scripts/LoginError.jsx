@@ -10,7 +10,7 @@ export function LoginError() {
     function newErrorMessage() {
         React.useEffect(() => {
             Socket.on('messageError', (data) => {
-                console.log("Received a error from server: " + data['errormessage']);
+                //console.log("Received a error from server: " + data['errormessage']);
                 setMessage(data['errormessage']);
             });
         });
