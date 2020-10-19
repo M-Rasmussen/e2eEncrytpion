@@ -88,3 +88,9 @@ li{
 .LoginErrorMessage{
     color:red;
 }
+.logDispay{
+    width:auto;
+}
+.logHide{
+    display:none;
+}

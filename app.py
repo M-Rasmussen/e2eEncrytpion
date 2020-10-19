@@ -111,6 +111,9 @@ def on_new_google_user(data):
     socketio.emit('messageError', { 
         'errormessage': ''
             },room=request.sid)
+    socketio.emit('UserLogedIn', { 
+        'loggedinbro': 'logedin'
+            },room=request.sid)
 
 @app.route('/')
 def index():
