@@ -86,9 +86,6 @@ def on_new_number(data):
             socketio.emit('messageError', { 
             'errormessage': errorz
             },room=roomid)
-            # db.session.add(models.Chat(data['userName']['userName'],data['message']['message']));
-            # db.session.commit();
-            
     else:
         urlCheck=urlparse.urlParse(new_message)
         new_message=urlCheck.checkURL()

@@ -4,13 +4,11 @@ import ReactDOM from 'react-dom';
 import GoogleLogin from 'react-google-login';
 
 const responseGoogle = (response) => {
-  console.log(response);
 };
  
 
 function handleSubmit(response) {
-    //console.log(response);
-    //console.log(response.profileObj.name);
+
 
     let name = response.profileObj.name;
     let profilepic=response.profileObj.imageUrl;
@@ -19,7 +17,6 @@ function handleSubmit(response) {
         'profilepic':profilepic
     });
     
-    //console.log('Sent the name ' + name + ' to server!');
 }
 
 export function GoogleButton() {

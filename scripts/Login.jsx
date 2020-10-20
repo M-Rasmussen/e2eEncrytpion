@@ -12,7 +12,6 @@ export function OnLine() {
     function newNumber() {
         React.useEffect(() => {
             Socket.on('user updated', (data) => {
-                //console.log("Received a number from server: " + data['number']);
                 setNumber(data['number']);
             });
         });
@@ -26,7 +25,6 @@ export function OnLine() {
     }
     function displayLoginbutton(log){
         if(log == "logedin"){
-            //console.log("DISPLAY");
             return "logHide";
         }
         return "logDispay";
