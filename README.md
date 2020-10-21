@@ -1,4 +1,4 @@
-App can be found at https://cryptic-wildwood-42908.herokuapp.com/ 
+App can be found at https://calm-reef-22903.herokuapp.com/
 
 cd ~/environment && git clone https://github.com/NJIT-CS490/project2-m1-mtr26
 
@@ -82,6 +82,50 @@ m) Enter the key and host from your env file into your heroku app via the app se
 GENERAL ISSUES: always make sure your database is running: sudo service postgresql start
 if you have trouble downloading things enter sudo infront of the command
 
+
+
+
+Set up OAuth fro google. 
+1. Install React Component
+	a)Run: npm install react-google-login
+
+2. Create Google account and information needed
+	a) Go to https://console.developers.google.com/ and create account. 
+	b) Create project using the dashboard and name the project. (You do not need to define an organization.)
+ 	c) Click Credentials and then click "Create Credentials" and then click "OAuth client ID.
+		i) If Error or warning stating "To create an OAuth client ID, you must first set a product name on the consent screen"
+		ii) Click "CONFIGURE CONSENT SCREEN"
+		iii) Choose External
+		iv) For "Application name" enter something smiliear to your project name, but not the same.
+		v)Press Save
+	d)Click Credentials and then click "Create Credentials" and then click "OAuth client ID" then click "web application"
+	e) Go to Credentials screen and under OAuth 2.0 Client IDs, be sure to enter the URI's of your 	application. 
+
+URL Parser:
+1. Server side
+	a) Run: pip install rfc3987
+	b) refrence https://pypi.org/project/rfc3987/ and https://stackoverflow.com/questions/12565098/python-how-to-check-if-a-string-is-a-valid-iri inorder to determine if a string is a url or a picture
+2. Client Side:
+	a) Display the image or link in text.
+	b) https://stackoverflow.com/questions/17634019/javascript-load-an-image-from-url-and-display
+	c) Create element and then display that element
+
+
+
+TECHNICAL ISSUES
+1. One of the major technical issues that I was having was the issue of getting the images to display along with the links for the chat portion. At first I did not pay attention to the links that were give in the assignment. I was attempting to pass html code to the function return statement in react. I was at a stand still, but then I went in and looked at the project 2 Specifications page and found out that I would have to create a html element in Java script or a react function and passed it, it eventually worked. 
+
+2. The other technical issue that I had was not just figuring out the logic inorder to parse through whether the url is a pic or not. Using the rfc3987 was easy but being able to parse through inorder to seperate the url or just a message string. It really wasnt that difficult, but I needed to slow down and actually think about the logic. I basically created a string to hold words before, and then when it hit, I put the rest in the back. THen I put them all together again and sent it out, and then parsed through it again on the front end. I am doing alot of parsing, and think there could be a better way. 
+
+Things that I could have done if I did not have 2 midterms on tuesday. I would have like to worked with the database and make is so I could loop through more each individual item. I would probably create an individual funciton for picture, name, and message. ANd instead of storing them in a list on the front end give each message a div. I am really just thinking of all of this now and do not have the time to impement that. Never thought about how I would do that until right now. 
+
+The other thing that I would have liked to implement another way to use the information to sign in, and also create a specific page for the user to actually sign in on. Like create a new page so that the user will be able to do sign in first and then be forwarded to a new page where the chat app was. Also I would have liked to create a lsit of all the people that are online.
+
+
+
+
+
+MILESTONE 1 INFORMATION:
 Known Issues:
 
 One of the biggest issues that I am having is displaying the database information aka chat with react, but I figured out a work around explained in the first technical issue. I think it would be better to be send the information without having to concat them originally, so I bet I will have to solve this issue for milestone two. If I had more time I would have like to figure that out more because my app works, but it creates multiple spots that I have to parse through code which makes it even more inefficient. It is in the Chatbox react file along with the app py emit_all_messages functions that concat it. 
