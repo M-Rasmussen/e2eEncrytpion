@@ -1,50 +1,67 @@
-import * as React from 'react';
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
+import { GoogleLogin } from 'react-google-login';
 import { Socket } from './Socket';
-import './styles.css';
-import { GoogleButton } from './GoogleButton';
-import { LoginError } from './LoginError';
-import { UserPicture } from './ProfilePicture';
+import './loginstyle.css';
+import { Cal_comp } from './CalenderComp.jsx';
+import { HomePage } from './LogedInHome';
 
+export default function Login() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [username, setUsername] = useState('');
+  const [ccode, setCcode] = useState([-1]);
 
-export function OnLine() {
-    const [number, setNumber] = React.useState(0);
-    const [logedin, setlogedin]=React.useState("");
-    function newNumber() {
-        React.useEffect(() => {
-            Socket.on('user updated', (data) => {
-                setNumber(data['number']);
-            });
-        });
-    }
-    function loggedinbutton(){
-        React.useEffect(() => {
-            Socket.on('UserLogedIn',(data) => {
-                setlogedin(data['loggedinbro']);
-            });
-        });
-    }
-    function displayLoginbutton(log){
-        if(log == "logedin"){
-            return "logHide";
-        }
-        return "logDispay";
-    }
-    
-    newNumber();
-    loggedinbutton();
+  function loginUser(response) {
+    const name = response.getBasicProfile().getName();
+    const email = response.getBasicProfile().getEmail();
+    const idToken = response.getAuthResponse().id_token;
+    Socket.emit('new google user', {
+      name: name,
+      email: email,
+      idtoken: idToken
+    });
+  }
 
+  function loginUserFail() {
+    return false;
+  }
+
+  function verifiedSession() {
+    React.useEffect(() => {
+      Socket.on('Verified', (data) => {
+        setLoggedIn(true);
+        setUsername(data.name);
+        setCcode(data.ccodes);
+      });
+    }, []);
+  }
+  
+  verifiedSession();
+
+  if (loggedIn && ccode[0] != -1) {
     return (
-        <div className="grid-item onlinegrid">
-            <div className={displayLoginbutton(logedin)}>
-            <GoogleButton />
-            </div>
-            <p>Welcome to the chatroom, please enter your name in the bottom right hand corner and then feel free to send messages.</p>
-            <p>Active Users:<span>{number}</span> </p>
-            <LoginError />
-            <UserPicture />
-        </div>
+      <div className="outermost">
+      <h1 className="header">Calglomerate</h1>
+      <div className="container">
+          <HomePage ccode={ccode} />
+      </div>
+    </div>
     );
+  }
+  return (
+    <div className="outermost">
+      <h1 className="header">Calglomerate</h1>
+      <div className="container">
+          <GoogleLogin
+            clientId="658056760445-ejq8q635n1948vqieqf95vsa6c6e1fvp.apps.googleusercontent.com"
+            buttonText="Login"
+            onSuccess={loginUser}
+            onFailure={loginUserFail}
+            cookiePolicy="single_host_origin"
+          />
+      </div>
+    </div>
+  );
 }
-
 
 
