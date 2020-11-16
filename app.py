@@ -8,6 +8,7 @@ import flask_sqlalchemy
 import models
 from google.oauth2 import id_token
 from google.auth.transport import requests
+from flask_socketio import join_room, leave_room
 
 MESSAGE_RECEIVED_CHANNEL = 'message received'
 USER_UPDATE_CHANNEL='user updated'
@@ -31,7 +32,7 @@ db = flask_sqlalchemy.SQLAlchemy(app)
 db.init_app(app)
 db.app = app
 
-
+arrayList=[]
 def push_new_user_to_db(ident, name, email):
     """
     Pushes new user to database.
@@ -48,7 +49,10 @@ def add_room_for_user(userid, roomName):
     db.session.commit()
     return addedRoom.userid
 
-
+def return_Message(channel):
+    socketio.emit(channel,{
+        'allMessages': arrayList
+    })
 
 def get_sid():
     '''
@@ -74,36 +78,102 @@ def on_disconnect():
     print("Someone disconnected!")
 
 
+@socketio.on('join')
+def on_join(data):
+    username = data['username']
+    room = data['room']
+    join_room(room)
+    socketio.send(username + ' has entered the room.', room=room)
+
+@socketio.on('leave')
+def on_leave(data):
+    username = data['username']
+    room = data['room']
+    leave_room(room)
+    socketio.send(username + ' has left the room.', room=room)
 
 
 
+@socketio.on("new google user")
+def on_new_google_user(data):
+    """
+    Runs verification on google token.
+    """
+    print("Beginning to authenticate data: ", data)
+    sid = get_sid()
+    try:
+        idinfo = id_token.verify_oauth2_token(
+            data["idtoken"],
+            requests.Request(),
+            "713754122186-g61h2i8np8ekhbtn7idqs3rlsi9t5jhn.apps.googleusercontent.com",
+        )
+        userid = idinfo["sub"]
+        print("Verified user. Proceeding to check database.")
+        exists = (
+            db.session.query(models.AuthUser.userid).filter_by(userid=userid).scalar()
+            is not None
+        )
+        if not exists:
+            push_new_user_to_db(userid, data["name"], data["email"])
+            add_room_for_user(userid,1)
+        all_rooms = [
+            record.roomid
+            for record in db.session.query(models.Rooms)
+            .filter_by(userid=userid)
+            .all()
+        ]
+        socketio.emit(
+            "Verified", {"name": data["name"], "roomid": all_rooms}, room=sid
+        )
+        return userid
+    except ValueError:
+        # Invalid token
+        print("Could not verify token.")
+        return "Unverified."
+    except KeyError:
+        print("Malformed token.")
+        return "Unverified."
 
-def emit_all_messages(channel):
-    all_messages = [ \
-        db_message.message for db_message \
-        in db.session.query(models.Chat).all()]
-    all_names =[\
-        db_name.name for db_name in db.session.query(models.Chat).all() ] 
+@socketio.on("chat")
+def on_new_message(data):
+    print(data)
+    arrayList.append(data)
+    return_Message('message received')
+
+
+
+@app.route('/')
+def index():
+    models.db.create_all()
+    db.session.commit()
+    return flask.render_template('index.html')
+
+
+if __name__ == '__main__': 
+    socketio.run(
+        app,
+        host=os.getenv('IP', '0.0.0.0'),
+        port=int(os.getenv('PORT', 8080)),
+        debug=True
+    )
+
+# def emit_all_messages(channel):
+#     all_messages = [ \
+#         db_message.message for db_message \
+#         in db.session.query(models.Chat).all()]
+#     all_names =[\
+#         db_name.name for db_name in db.session.query(models.Chat).all() ] 
     
-    arrayList=[]
-    for x in range(len(all_messages)):
-        messageOp=all_names[x]
-        messageOp+= ": "
-        messageOp+=all_messages[x]
-        arrayList.append(messageOp)
-    socketio.emit(channel, {
-        'allMessages': arrayList
-    })
+#     arrayList=[]
+#     for x in range(len(all_messages)):
+#         messageOp=all_names[x]
+#         messageOp+= ": "
+#         messageOp+=all_messages[x]
+#         arrayList.append(messageOp)
+#     socketio.emit(channel, {
+#         'allMessages': arrayList
+#     })
     
-
-def emit_num_users(channel):
-    userCount=len(users)
-    socketio.emit(channel, {
-        'number': userCount
-    })
-    
-    
-
 # @socketio.on('new message')
 # def on_new_number(data):
 #     print("Got an event for new number with data:", data)
@@ -128,59 +198,3 @@ def emit_num_users(channel):
 #         db.session.add(models.Chat('bot',bCR.botStuff()));
 #         db.session.commit();
 #         emit_all_messages(MESSAGE_RECEIVED_CHANNEL)    
-
-@socketio.on("new google user")
-def on_new_google_user(data):
-    """
-    Runs verification on google token.
-    """
-    print("Beginning to authenticate data: ", data)
-    sid = get_sid()
-    try:
-        idinfo = id_token.verify_oauth2_token(
-            data["idtoken"],
-            requests.Request(),
-            "658056760445-ejq8q635n1948vqieqf95vsa6c6e1fvp.apps.googleusercontent.com",
-        )
-        userid = idinfo["sub"]
-        print("Verified user. Proceeding to check database.")
-        exists = (
-            db.session.query(models.AuthUser.userid).filter_by(userid=userid).scalar()
-            is not None
-        )
-        if not exists:
-            push_new_user_to_db(userid, data["name"], data["email"])
-            add_calendar_for_user(userid)
-        all_ccodes = [
-            record.ccode
-            for record in db.session.query(models.Calendars)
-            .filter_by(userid=userid)
-            .all()
-        ]
-        socketio.emit(
-            "Verified", {"name": data["name"], "ccodes": all_ccodes}, room=sid
-        )
-        return userid
-    except ValueError:
-        # Invalid token
-        print("Could not verify token.")
-        return "Unverified."
-    except KeyError:
-        print("Malformed token.")
-        return "Unverified."
-
-
-@app.route('/')
-def index():
-    models.db.create_all()
-    db.session.commit()
-    return flask.render_template('index.html')
-
-
-if __name__ == '__main__': 
-    socketio.run(
-        app,
-        host=os.getenv('IP', '0.0.0.0'),
-        port=int(os.getenv('PORT', 8080)),
-        debug=True
-    )

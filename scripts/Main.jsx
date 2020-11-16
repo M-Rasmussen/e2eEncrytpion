@@ -1,6 +1,12 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import './styles.css';
-import { Content } from './Content';
+//import './styles.css';
+import Login from './Login';
 
-ReactDOM.render(<Content />, document.getElementById('content'));
+const rootElement = document.getElementById('content');
+ReactDOM.render(
+  <React.StrictMode>
+    <Login />
+  </React.StrictMode>,
+  rootElement
+);

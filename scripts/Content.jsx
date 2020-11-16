@@ -1,19 +1,14 @@
     
 import * as React from 'react';
-import './styles.css';
-
 import { Button } from './Button';
-import { Socket } from './Socket';
-import { ChatList } from './ChatBox';
-import { OnLine } from './Login';
-export function Content() {
+import { ChatList } from './ChatBox'
 
-
+export function Content( {username}) {
     return (
-        <div className ="grid-container">
-            <OnLine />
+        <div>
+            <p>logged in {username}</p>
+            <Button username={username}/>
             <ChatList />
-            <Button />
         </div>
     );
 }

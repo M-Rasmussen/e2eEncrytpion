@@ -36,6 +36,17 @@ class Rooms(db.Model):
         return "< roomid: {}\nuserid: {}\nroomName: {}".format(self.roomid, self.userid, self.roomName)
 
 class Chat(db.Model):
+    """
+    defines Wehre all chats are in
+    """
     roomid = db.Column(db.Integer, primary_key=True)
-    userid = db.Column(db.String(120))
-    roomName = db.Column(db.String(120))
+    userName = db.Column(db.String(120))
+    message = db.Column(db.String(250))
+
+    def __init__(self, userName, chatMessage):
+        self.userName=userName
+        self.chatMessage=chatMessage
+    def __repr__(self):
+        return "< {}: {} ".format(self.userName, self.chatMessage)
+    
+    

@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { GoogleLogin } from 'react-google-login';
 import { Socket } from './Socket';
-import './loginstyle.css';
-import { Cal_comp } from './CalenderComp.jsx';
-import { HomePage } from './LogedInHome';
+import { Content } from './Content';
 
 export default function Login() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
-  const [ccode, setCcode] = useState([-1]);
+  const [roomName, setroomName] = useState([-1]);
 
   function loginUser(response) {
     const name = response.getBasicProfile().getName();
@@ -31,29 +29,29 @@ export default function Login() {
       Socket.on('Verified', (data) => {
         setLoggedIn(true);
         setUsername(data.name);
-        setCcode(data.ccodes);
+        setroomName(data.roomid);
       });
     }, []);
   }
   
   verifiedSession();
 
-  if (loggedIn && ccode[0] != -1) {
+  if (loggedIn && roomName[0] != -1) {
     return (
       <div className="outermost">
-      <h1 className="header">Calglomerate</h1>
+      <h1 className="header">Chat APP</h1>
       <div className="container">
-          <HomePage ccode={ccode} />
+          <Content username={username} />
       </div>
     </div>
     );
   }
   return (
     <div className="outermost">
-      <h1 className="header">Calglomerate</h1>
+      <h1 className="header">Chat APP</h1>
       <div className="container">
           <GoogleLogin
-            clientId="658056760445-ejq8q635n1948vqieqf95vsa6c6e1fvp.apps.googleusercontent.com"
+            clientId="713754122186-g61h2i8np8ekhbtn7idqs3rlsi9t5jhn.apps.googleusercontent.com"
             buttonText="Login"
             onSuccess={loginUser}
             onFailure={loginUserFail}

@@ -30,6 +30,7 @@
     ]
   },
   "dependencies": {
+    "aes256": "^1.0.4",
     "node-sass": "^5.0.0",
     "react-google-login": "^5.1.21",
     "react-lottie": "^1.2.3",
