@@ -80,14 +80,16 @@ def on_disconnect():
 
 @socketio.on('join')
 def on_join(data):
-    username = data['username']
+    username = data['name']
     room = data['room']
     join_room(room)
-    socketio.send(username + ' has entered the room.', room=room)
+    print(room)
+    print(username)
+    socketio.emit("joinedRoom",{'name': username, 'room':room}, room=room)
 
 @socketio.on('leave')
 def on_leave(data):
-    username = data['username']
+    username = data['name']
     room = data['room']
     leave_room(room)
     socketio.send(username + ' has left the room.', room=room)
