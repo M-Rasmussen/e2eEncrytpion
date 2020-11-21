@@ -4,16 +4,19 @@ import { DoDecrypt, DoEncrypt } from './encypted'
 import './styles.css';
 
 
-export function Button({username}) {
+export function Button({username, roomInName}) {
 const [text, setText] = useState("");
-
+// const [roomInName, setInNameRoom]= useState("123")
 const sendData = () => {
     if (text !== "") {
       //encrypt here
       let str = ": ";
       let usertext= username.concat(str, text);
       const data = DoEncrypt(usertext);
-      Socket.emit("chat", data);
+      Socket.emit("chat", {
+        message: data,
+        roomid: roomInName
+      });
       setText("");
     }
   };

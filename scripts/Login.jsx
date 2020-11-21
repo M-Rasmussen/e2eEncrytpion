@@ -7,7 +7,6 @@ import { Content } from './Content';
 export default function Login() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
-  const [roomName, setroomName] = useState([-1]);
 
   function loginUser(response) {
     const name = response.getBasicProfile().getName();
@@ -29,14 +28,13 @@ export default function Login() {
       Socket.on('Verified', (data) => {
         setLoggedIn(true);
         setUsername(data.name);
-        setroomName(data.roomid);
       });
     }, []);
   }
   
   verifiedSession();
 
-  if (loggedIn && roomName[0] != -1) {
+  if (loggedIn) {
     return (
       <div className="outermost">
       <h1 className="header">Chat APP</h1>

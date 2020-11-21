@@ -33,22 +33,52 @@ db.init_app(app)
 db.app = app
 
 arrayList=[]
-def push_new_user_to_db(ident, name, email):
+FAKEDB={}
+def push_new_user_to_db(ident, name):
     """
     Pushes new user to database.
     """
-    db.session.add(models.AuthUser(ident, name, email))
+    db.session.add(models.AuthUser(ident, name))
     db.session.commit()
 
-def add_room_for_user(userid, roomName):
-    """
-    adds an event, returns the roomid of the new room
-    """
-    addedRoom = models.Rooms(userid, roomName)
-    db.session.add(addedRoom)
-    db.session.commit()
-    return addedRoom.userid
+# def add_room_for_user(userid, roomName):
+#     """
+#     adds an event, returns the roomid of the new room
+#     """
+#     addedRoom = models.Rooms(userid, roomName)
+#     db.session.add(addedRoom)
+#     db.session.commit()
+#     return addedRoom.userid
 
+
+def add_message_with_room_id(roomName, message):
+    db.session.add(models.Chat(message, roomName))
+    db.session.commit()
+    if roomName in FAKEDB:
+        FAKEDB[roomName].append(message)
+    else:
+        FAKEDB[roomName] = [message]
+
+def check_if_room_exists(room):
+    if room in FAKEDB:
+        send_message_history(room)
+
+
+def send_message_history(room):
+    arrayList=[ \
+        db_message.message for db_message \
+        in db.session.query(models.Chat).filter_by(room=room).all()]
+        # db.session.query(models.AuthUser.userid).filter_by(userid=userid).all()
+
+    
+    
+    
+    # arrayList=FAKEDB.get(room)
+    socketio.emit('message received',{
+        'allMessages': arrayList
+    },room=room)
+    
+    
 def return_Message(channel):
     socketio.emit(channel,{
         'allMessages': arrayList
@@ -86,7 +116,8 @@ def on_join(data):
     print(room)
     print(username)
     socketio.emit("joinedRoom",{'name': username, 'room':room}, room=room)
-
+    check_if_room_exists(room)
+    
 @socketio.on('leave')
 def on_leave(data):
     username = data['name']
@@ -116,16 +147,10 @@ def on_new_google_user(data):
             is not None
         )
         if not exists:
-            push_new_user_to_db(userid, data["name"], data["email"])
-            add_room_for_user(userid,1)
-        all_rooms = [
-            record.roomid
-            for record in db.session.query(models.Rooms)
-            .filter_by(userid=userid)
-            .all()
-        ]
+            push_new_user_to_db(userid, data["name"])
+            
         socketio.emit(
-            "Verified", {"name": data["name"], "roomid": all_rooms}, room=sid
+            "Verified", {"name": data["name"]}, room=sid
         )
         return userid
     except ValueError:
@@ -138,14 +163,21 @@ def on_new_google_user(data):
 
 @socketio.on("chat")
 def on_new_message(data):
-    print(data)
-    arrayList.append(data)
-    return_Message('message received')
+    print(data["message"])
+    message=data["message"]
+    print(data["roomid"])
+    roomName=data["roomid"]
+    add_message_with_room_id(roomName, message)
+    send_message_history(roomName)
+
+    # arrayList.append(data)
+    # return_Message('message received')
 
 
 
 @app.route('/')
 def index():
+    models.db.drop_all()
     models.db.create_all()
     db.session.commit()
     return flask.render_template('index.html')
