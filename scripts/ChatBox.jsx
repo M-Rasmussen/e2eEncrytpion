@@ -17,10 +17,10 @@ const [messages, setMessages] = React.useState([]);
 getNewMessages();
 
     return (
-        <div>
+        <div className="ChatBox">
             <ul>
                {messages.map((message, index) =>
-                        <li key={index} >{ DoDecrypt(message)}</li>)}
+                        <li key={index}><span className="widthspace">{message}</span><span className="widthspace">{ DoDecrypt(message)}</span></li>)}
             </ul>
         </div>
         );

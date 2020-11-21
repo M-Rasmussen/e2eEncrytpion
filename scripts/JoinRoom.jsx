@@ -43,19 +43,24 @@ const join = () => {
 
 if(inRoom){
    return(
-    <div>
-    <span>{joinName}</span>
-        <h1>{roomInName}</h1>
+    <div className="ContainerHeight">
+        <div className= "leftSide">
+        <h3>You are in </h3>
+        <h3>{roomInName}</h3>
         <button onClick={leave}>Leave Room</button>
-        <Button username={username} roomInName={roomInName}/>
+        </div>
+        <div className="rightSide">
         <ChatList />
+        <Button username={username} roomInName={roomInName}/>
+        </div>
     </div>
     );
 }
 return(
     <div>
+        <h3>Please Enter the Room</h3>
         <input
-          placeholder="enter your Room ID"
+          placeholder="Enter Room Name"
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyPress={(e) => {
@@ -64,7 +69,7 @@ return(
             }
           }}
         ></input>
-        <button onClick={join}>Send</button>
+        <button onClick={join}>Join</button>
       </div>
     );
 }

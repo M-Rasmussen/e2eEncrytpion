@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { GoogleLogin } from 'react-google-login';
 import { Socket } from './Socket';
-import { Content } from './Content';
+import { Join_Room} from './JoinRoom';
+import './styles.css'
 
 export default function Login() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -39,7 +40,7 @@ export default function Login() {
       <div className="outermost">
       <h1 className="header">Chat APP</h1>
       <div className="container">
-          <Content username={username} />
+            <Join_Room username={username}/>
       </div>
     </div>
     );
