@@ -18,10 +18,12 @@ getNewMessages();
 
     return (
         <div className="ChatBox">
-            <ul>
                {messages.map((message, index) =>
-                        <li key={index}><span className="widthspace">{message}</span><span className="widthspace">{ DoDecrypt(message)}</span></li>)}
-            </ul>
+            <ul key={index}>
+            
+                        <li>Encrypted: {message}</li>
+                        <li>Decrypted: { DoDecrypt(message)}</li>
+            </ul>)}
         </div>
         );
 }
