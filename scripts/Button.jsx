@@ -21,8 +21,9 @@ const sendData = () => {
     }
   };
 return(
-    <div>
+    <div className="formwrapper">
         <input
+        className="inputgrid"
           placeholder="enter your message"
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -32,7 +33,7 @@ return(
             }
           }}
         ></input>
-        <button onClick={sendData}>Send</button>
+        <button className="submitgrid" onClick={sendData}>Send</button>
       </div>
     );
 }

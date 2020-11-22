@@ -177,7 +177,6 @@ def on_new_message(data):
 
 @app.route('/')
 def index():
-    models.db.drop_all()
     models.db.create_all()
     db.session.commit()
     return flask.render_template('index.html')
