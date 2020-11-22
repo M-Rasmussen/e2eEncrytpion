@@ -60,6 +60,8 @@ def add_message_with_room_id(roomName, message):
         FAKEDB[roomName] = [message]
 
 def check_if_room_exists(room):
+    send_message_history(room)
+
     if room in FAKEDB:
         send_message_history(room)
 
