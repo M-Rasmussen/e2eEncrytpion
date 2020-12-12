@@ -1,6 +1,6 @@
 var aes256 = require("aes256");
 
-var key = "obvwoqcbv21801f19d0zibcoavwpnq";
+var key = process.env.REACT_APP_KEY;
 
 export const DoEncrypt = (text) => {
   var encrypted = aes256.encrypt(key, text);

@@ -6,6 +6,9 @@ import './styles.css';
 
 
 export function Join_Room({username}) {
+    const { REACT_APP_MY_ENV, NODE_ENV  } = process.env;
+
+    
 const [text, setText] = useState("");
 
 const [joinName, setJoinName] = React.useState("");
@@ -40,6 +43,7 @@ const join = () => {
       setText("");
     }
   };
+         console.log(process.env.REACT_APP_TITLE);
 
 if(inRoom){
    return(
