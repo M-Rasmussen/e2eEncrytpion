@@ -32,7 +32,6 @@ const leave = () =>{
 };
 const join = () => {
     if (text !== "") {
-      //encrypt here 
       Socket.emit("join", {
           room: text,
           name: username
@@ -50,7 +49,7 @@ if(inRoom){
         <button onClick={leave}>Leave Room</button>
         </div>
         <div className="rightSide">
-        <ChatList />
+        <ChatList/>
         <Button username={username} roomInName={roomInName}/>
         </div>
     </div>

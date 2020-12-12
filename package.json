@@ -30,10 +30,13 @@
     ]
   },
   "dependencies": {
+    "@virgilsecurity/e3kit": "^0.8.0-beta.0",
+    "@virgilsecurity/e3kit-browser": "^2.4.0",
     "aes256": "^1.0.4",
     "node-sass": "^5.0.0",
     "react-google-login": "^5.1.21",
     "react-lottie": "^1.2.3",
+    "react-native-virgil-crypto": "^0.6.1",
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.5",

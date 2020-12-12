@@ -5,9 +5,15 @@ import { Socket } from './Socket';
 import { Join_Room} from './JoinRoom';
 import './styles.css'
 
+
+
 export default function Login() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
+
+
+
+
 
   function loginUser(response) {
     const name = response.getBasicProfile().getName();
@@ -34,6 +40,7 @@ export default function Login() {
   }
   
   verifiedSession();
+;
 
   if (loggedIn) {
     return (

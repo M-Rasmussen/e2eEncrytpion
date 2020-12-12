@@ -9,6 +9,10 @@ import models
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from flask_socketio import join_room, leave_room
+import datetime
+
+
+
 
 MESSAGE_RECEIVED_CHANNEL = 'message received'
 USER_UPDATE_CHANNEL='user updated'
@@ -24,6 +28,8 @@ dotenv_path = join(dirname(__file__), 'project2.env')
 load_dotenv(dotenv_path)
 
 database_uri = os.environ['DATABASE_URL']
+p_key = os.environ['PRIVATE_KEY']
+
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
@@ -34,6 +40,11 @@ db.app = app
 
 arrayList=[]
 FAKEDB={}
+
+
+
+
+
 def push_new_user_to_db(ident, name):
     """
     Pushes new user to database.
@@ -127,6 +138,12 @@ def on_leave(data):
     leave_room(room)
     socketio.send(username + ' has left the room.', room=room)
 
+@socketio.on('getk')
+def on_get(data):
+    sid=get_sid()
+    socketio.emit(
+        "key", {'key':p_key}, room=sid)
+
 
 
 @socketio.on("new google user")
@@ -150,9 +167,9 @@ def on_new_google_user(data):
         )
         if not exists:
             push_new_user_to_db(userid, data["name"])
-            
+        
         socketio.emit(
-            "Verified", {"name": data["name"]}, room=sid
+            "Verified", {"name": data["name"] }, room=sid
         )
         return userid
     except ValueError:
@@ -191,45 +208,3 @@ if __name__ == '__main__':
         port=int(os.getenv('PORT', 8080)),
         debug=True
     )
-
-# def emit_all_messages(channel):
-#     all_messages = [ \
-#         db_message.message for db_message \
-#         in db.session.query(models.Chat).all()]
-#     all_names =[\
-#         db_name.name for db_name in db.session.query(models.Chat).all() ] 
-    
-#     arrayList=[]
-#     for x in range(len(all_messages)):
-#         messageOp=all_names[x]
-#         messageOp+= ": "
-#         messageOp+=all_messages[x]
-#         arrayList.append(messageOp)
-#     socketio.emit(channel, {
-#         'allMessages': arrayList
-#     })
-    
-# @socketio.on('new message')
-# def on_new_number(data):
-#     print("Got an event for new number with data:", data)
-#     roomid=request.sid
-#     new_message = data['message']['message']
-#     if not any(d['userid']==request.sid for d in users):
-#             errorz="There was an error please make sure you are logged in."
-#             print('inside senderror')
-#             socketio.emit('messageError', { 
-#             'errormessage': errorz
-#             },room=roomid)
-#     else:
-#         urlCheck=urlparse.urlParse(new_message)
-#         new_message=urlCheck.checkURL()
-#         res = next((sub for sub in users if sub['userid'] == request.sid), None)
-#         db.session.add(models.Chat(res.get("name"),new_message));
-#         db.session.commit();
-#     emit_all_messages(MESSAGE_RECEIVED_CHANNEL)
-#     #code to see if the message was a bot, if was figure out response and send it back
-#     if(new_message[:2]=="!!"):
-#         bCR=botbuild.chatBot(new_message)
-#         db.session.add(models.Chat('bot',bCR.botStuff()));
-#         db.session.commit();
-#         emit_all_messages(MESSAGE_RECEIVED_CHANNEL)    
